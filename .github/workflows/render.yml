@@ -1,0 +1,185 @@
+name: FORGE Render Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      job_id:
+        description: 'FORGE Job ID'
+        required: true
+        type: string
+      prompt:
+        description: 'Video prompt'
+        required: true
+        type: string
+      style:
+        description: 'Visual style'
+        required: true
+        type: string
+        default: 'cinematic_dark'
+      duration:
+        description: 'Duration in seconds'
+        required: true
+        type: string
+        default: '60'
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          ffmpeg -version | head -1
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Chrome for Remotion
+        run: npx remotion browser ensure
+
+      - name: Run FORGE Pipeline
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          FORGE_API_SLOTS: '20'
+          FORGE_SCENE_WORKERS: '16'
+          FORGE_GLOBAL_CONCURRENCY: '0'
+          FORGE_API_RETRY_ATTEMPTS: '2'
+          FORGE_AUDIO_DURATION_TOLERANCE: '0.05'
+          FORGE_AUDIO_DURATION_ATTEMPTS: '3'
+          FORGE_REASONING_POLICY: 'auto'
+          REMOTION_BUNDLER: 'webpack'
+          DISABLE_RSPACK: '1'
+          CI: 'true'
+          FORGE_API_01_KEY: ${{ secrets.FORGE_API_01_KEY }}
+          FORGE_API_01_PROVIDER: ${{ secrets.FORGE_API_01_PROVIDER }}
+          FORGE_API_01_BASE: ${{ secrets.FORGE_API_01_BASE }}
+          FORGE_API_01_MODEL: ${{ secrets.FORGE_API_01_MODEL }}
+          FORGE_API_01_CONCURRENCY: '1'
+          FORGE_API_02_KEY: ${{ secrets.FORGE_API_02_KEY }}
+          FORGE_API_02_PROVIDER: ${{ secrets.FORGE_API_02_PROVIDER }}
+          FORGE_API_02_BASE: ${{ secrets.FORGE_API_02_BASE }}
+          FORGE_API_02_MODEL: ${{ secrets.FORGE_API_02_MODEL }}
+          FORGE_API_02_CONCURRENCY: '1'
+          FORGE_API_03_KEY: ${{ secrets.FORGE_API_03_KEY }}
+          FORGE_API_03_PROVIDER: ${{ secrets.FORGE_API_03_PROVIDER }}
+          FORGE_API_03_BASE: ${{ secrets.FORGE_API_03_BASE }}
+          FORGE_API_03_MODEL: ${{ secrets.FORGE_API_03_MODEL }}
+          FORGE_API_03_CONCURRENCY: '1'
+          FORGE_API_04_KEY: ${{ secrets.FORGE_API_04_KEY }}
+          FORGE_API_04_PROVIDER: ${{ secrets.FORGE_API_04_PROVIDER }}
+          FORGE_API_04_BASE: ${{ secrets.FORGE_API_04_BASE }}
+          FORGE_API_04_MODEL: ${{ secrets.FORGE_API_04_MODEL }}
+          FORGE_API_04_CONCURRENCY: '1'
+          FORGE_API_05_KEY: ${{ secrets.FORGE_API_05_KEY }}
+          FORGE_API_05_PROVIDER: ${{ secrets.FORGE_API_05_PROVIDER }}
+          FORGE_API_05_BASE: ${{ secrets.FORGE_API_05_BASE }}
+          FORGE_API_05_MODEL: ${{ secrets.FORGE_API_05_MODEL }}
+          FORGE_API_05_CONCURRENCY: '1'
+          FORGE_API_06_KEY: ${{ secrets.FORGE_API_06_KEY }}
+          FORGE_API_06_PROVIDER: ${{ secrets.FORGE_API_06_PROVIDER }}
+          FORGE_API_06_BASE: ${{ secrets.FORGE_API_06_BASE }}
+          FORGE_API_06_MODEL: ${{ secrets.FORGE_API_06_MODEL }}
+          FORGE_API_06_CONCURRENCY: '1'
+          FORGE_API_07_KEY: ${{ secrets.FORGE_API_07_KEY }}
+          FORGE_API_07_PROVIDER: ${{ secrets.FORGE_API_07_PROVIDER }}
+          FORGE_API_07_BASE: ${{ secrets.FORGE_API_07_BASE }}
+          FORGE_API_07_MODEL: ${{ secrets.FORGE_API_07_MODEL }}
+          FORGE_API_07_CONCURRENCY: '1'
+          FORGE_API_08_KEY: ${{ secrets.FORGE_API_08_KEY }}
+          FORGE_API_08_PROVIDER: ${{ secrets.FORGE_API_08_PROVIDER }}
+          FORGE_API_08_BASE: ${{ secrets.FORGE_API_08_BASE }}
+          FORGE_API_08_MODEL: ${{ secrets.FORGE_API_08_MODEL }}
+          FORGE_API_08_CONCURRENCY: '1'
+          FORGE_API_09_KEY: ${{ secrets.FORGE_API_09_KEY }}
+          FORGE_API_09_PROVIDER: ${{ secrets.FORGE_API_09_PROVIDER }}
+          FORGE_API_09_BASE: ${{ secrets.FORGE_API_09_BASE }}
+          FORGE_API_09_MODEL: ${{ secrets.FORGE_API_09_MODEL }}
+          FORGE_API_09_CONCURRENCY: '1'
+          FORGE_API_10_KEY: ${{ secrets.FORGE_API_10_KEY }}
+          FORGE_API_10_PROVIDER: ${{ secrets.FORGE_API_10_PROVIDER }}
+          FORGE_API_10_BASE: ${{ secrets.FORGE_API_10_BASE }}
+          FORGE_API_10_MODEL: ${{ secrets.FORGE_API_10_MODEL }}
+          FORGE_API_10_CONCURRENCY: '1'
+          FORGE_API_11_KEY: ${{ secrets.FORGE_API_11_KEY }}
+          FORGE_API_11_PROVIDER: ${{ secrets.FORGE_API_11_PROVIDER }}
+          FORGE_API_11_BASE: ${{ secrets.FORGE_API_11_BASE }}
+          FORGE_API_11_MODEL: ${{ secrets.FORGE_API_11_MODEL }}
+          FORGE_API_11_CONCURRENCY: '1'
+          FORGE_API_12_KEY: ${{ secrets.FORGE_API_12_KEY }}
+          FORGE_API_12_PROVIDER: ${{ secrets.FORGE_API_12_PROVIDER }}
+          FORGE_API_12_BASE: ${{ secrets.FORGE_API_12_BASE }}
+          FORGE_API_12_MODEL: ${{ secrets.FORGE_API_12_MODEL }}
+          FORGE_API_12_CONCURRENCY: '1'
+          FORGE_API_13_KEY: ${{ secrets.FORGE_API_13_KEY }}
+          FORGE_API_13_PROVIDER: ${{ secrets.FORGE_API_13_PROVIDER }}
+          FORGE_API_13_BASE: ${{ secrets.FORGE_API_13_BASE }}
+          FORGE_API_13_MODEL: ${{ secrets.FORGE_API_13_MODEL }}
+          FORGE_API_13_CONCURRENCY: '1'
+          FORGE_API_14_KEY: ${{ secrets.FORGE_API_14_KEY }}
+          FORGE_API_14_PROVIDER: ${{ secrets.FORGE_API_14_PROVIDER }}
+          FORGE_API_14_BASE: ${{ secrets.FORGE_API_14_BASE }}
+          FORGE_API_14_MODEL: ${{ secrets.FORGE_API_14_MODEL }}
+          FORGE_API_14_CONCURRENCY: '1'
+          FORGE_API_15_KEY: ${{ secrets.FORGE_API_15_KEY }}
+          FORGE_API_15_PROVIDER: ${{ secrets.FORGE_API_15_PROVIDER }}
+          FORGE_API_15_BASE: ${{ secrets.FORGE_API_15_BASE }}
+          FORGE_API_15_MODEL: ${{ secrets.FORGE_API_15_MODEL }}
+          FORGE_API_15_CONCURRENCY: '1'
+          FORGE_API_16_KEY: ${{ secrets.FORGE_API_16_KEY }}
+          FORGE_API_16_PROVIDER: ${{ secrets.FORGE_API_16_PROVIDER }}
+          FORGE_API_16_BASE: ${{ secrets.FORGE_API_16_BASE }}
+          FORGE_API_16_MODEL: ${{ secrets.FORGE_API_16_MODEL }}
+          FORGE_API_16_CONCURRENCY: '1'
+          FORGE_API_17_KEY: ${{ secrets.FORGE_API_17_KEY }}
+          FORGE_API_17_PROVIDER: ${{ secrets.FORGE_API_17_PROVIDER }}
+          FORGE_API_17_BASE: ${{ secrets.FORGE_API_17_BASE }}
+          FORGE_API_17_MODEL: ${{ secrets.FORGE_API_17_MODEL }}
+          FORGE_API_17_CONCURRENCY: '1'
+          FORGE_API_18_KEY: ${{ secrets.FORGE_API_18_KEY }}
+          FORGE_API_18_PROVIDER: ${{ secrets.FORGE_API_18_PROVIDER }}
+          FORGE_API_18_BASE: ${{ secrets.FORGE_API_18_BASE }}
+          FORGE_API_18_MODEL: ${{ secrets.FORGE_API_18_MODEL }}
+          FORGE_API_18_CONCURRENCY: '1'
+          FORGE_API_19_KEY: ${{ secrets.FORGE_API_19_KEY }}
+          FORGE_API_19_PROVIDER: ${{ secrets.FORGE_API_19_PROVIDER }}
+          FORGE_API_19_BASE: ${{ secrets.FORGE_API_19_BASE }}
+          FORGE_API_19_MODEL: ${{ secrets.FORGE_API_19_MODEL }}
+          FORGE_API_19_CONCURRENCY: '1'
+          FORGE_API_20_KEY: ${{ secrets.FORGE_API_20_KEY }}
+          FORGE_API_20_PROVIDER: ${{ secrets.FORGE_API_20_PROVIDER }}
+          FORGE_API_20_BASE: ${{ secrets.FORGE_API_20_BASE }}
+          FORGE_API_20_MODEL: ${{ secrets.FORGE_API_20_MODEL }}
+          FORGE_API_20_CONCURRENCY: '1'
+        run: |
+          node src/pipeline.js \
+            "${{ github.event.inputs.prompt }}" \
+            "${{ github.event.inputs.style }}" \
+            "${{ github.event.inputs.duration }}" \
+            "${{ github.event.inputs.job_id }}"
+
+      - name: Report failure to Supabase
+        if: failure()
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: |
+          curl -s -X PATCH \
+            "${SUPABASE_URL}/rest/v1/jobs?id=eq.${{ github.event.inputs.job_id }}" \
+            -H "apikey: ${SUPABASE_SERVICE_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_SERVICE_KEY}" \
+            -H "Content-Type: application/json" \
+            -d '{"status":"failed","stage":"failed","stage_label":"Server error — check Actions log","error":"GitHub Actions runner failed. See the Actions tab in GitHub for the full error log."}'

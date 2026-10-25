@@ -1,0 +1,31 @@
+{
+  "name": "forge-engine-v2",
+  "version": "2.1.0",
+  "description": "FORGE v2 \u2014 Research + Audio-Reactive AI Video Engine",
+  "type": "module",
+  "main": "src/pipeline.js",
+  "scripts": {
+    "start": "node src/pipeline.js",
+    "test": "node src/pipeline.js \"How the internet works\" data_manifold 45",
+    "test:space": "node src/pipeline.js \"How black holes form\" particle_cosmos 60",
+    "test:history": "node src/pipeline.js \"The fall of the Roman Empire\" cinematic_dark 90",
+    "test:science": "node src/pipeline.js \"How CRISPR gene editing works\" geometric_sharp 60",
+    "test:economy": "node src/pipeline.js \"How global inflation works\" data_manifold 60",
+    "test:current": "node src/pipeline.js \"The rise of artificial intelligence\" typographic_storm 60",
+    "test:local": "node scripts/local_checks.js",
+    "test:hardening": "node scripts/hardening_checks.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "remotion": "^4.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "three": "^0.160.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@remotion/cli": "^4.0.0"
+  }
+}
